@@ -109,7 +109,7 @@
     .status-badges {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .badge {
@@ -136,6 +136,12 @@
       background: #FFFDE7;
     }
 
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .btn-icon {
       background: white;
       border: 2px solid #E2E8F0;
@@ -146,7 +152,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       transition: all 0.2s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
@@ -158,6 +164,61 @@
 
     .btn-icon:active {
       transform: scale(0.95);
+    }
+
+    /* Special Exit & Utility Buttons */
+    .btn-pill {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 5px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+
+    .btn-exit {
+      background: #FFF0F0;
+      border-color: #FFAAA6;
+      color: #D63031;
+    }
+
+    .btn-exit:hover {
+      background: #FF7675;
+      color: white;
+      border-color: #D63031;
+      transform: scale(1.05);
+    }
+
+    .btn-pause {
+      background: #F0F9FF;
+      border-color: #BAE6FD;
+      color: #0284C7;
+    }
+
+    .btn-pause:hover {
+      background: #0284C7;
+      color: white;
+      border-color: #0369A1;
+      transform: scale(1.05);
+    }
+
+    .btn-wordlist {
+      background: #F0FDF4;
+      border-color: #BBF7D0;
+      color: #16A34A;
+    }
+
+    .btn-wordlist:hover {
+      background: #16A34A;
+      color: white;
+      border-color: #15803D;
+      transform: scale(1.05);
     }
 
     /* Lesson Selection Bar */
@@ -296,6 +357,43 @@
       display: block;
       width: 100%;
       height: 100%;
+    }
+
+    /* Pause Overlay */
+    .pause-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(5px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 20;
+    }
+
+    .pause-overlay.active {
+      display: flex;
+    }
+
+    .pause-card {
+      background: white;
+      padding: 24px 36px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      border: 4px solid #81D4FA;
+    }
+
+    .pause-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0284C7;
+      margin-bottom: 12px;
     }
 
     /* Mobile On-Screen Controls */
@@ -492,6 +590,89 @@
       box-shadow: none;
     }
 
+    /* Word List Table in Modal */
+    .wordlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .word-card-item {
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .word-card-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .word-card-en {
+      font-weight: 700;
+      color: #2D3748;
+      font-size: 0.95rem;
+    }
+
+    .word-card-zh {
+      color: #718096;
+      font-size: 0.85rem;
+    }
+
+    /* Settlement Summary Modal */
+    .settlement-card {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .settlement-trophy {
+      font-size: 3.5rem;
+      animation: gentle-bounce 1.5s infinite;
+    }
+
+    .settlement-score {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #FF2E63;
+      margin: 8px 0;
+    }
+
+    .settlement-stats {
+      display: flex;
+      justify-content: space-around;
+      background: #FFF5F7;
+      border: 2px dashed #FFB6C1;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 16px 0;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #333;
+    }
+
     /* Notice Toast */
     .toast {
       position: absolute;
@@ -518,7 +699,6 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Help Alert Box inside modal */
     .tip-box {
       background: #FFF8E1;
       border-left: 4px solid #FFC107;
@@ -528,7 +708,6 @@
       font-size: 0.88rem;
     }
 
-    /* Floating Feedback Text on Canvas */
     .floating-text-item {
       position: absolute;
       pointer-events: none;
@@ -543,6 +722,15 @@
     }
 
     /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .action-group .btn-pill span.btn-text {
+        display: none;
+      }
+      .btn-pill {
+        padding: 5px 8px;
+      }
+    }
+
     @media (max-width: 600px) {
       .game-wrapper {
         height: 100vh;
@@ -568,7 +756,7 @@
 </head>
 <body>
 
-  <div class="game-wrapper">
+  <div class="game-wrapper" id="gameWrapper">
     <!-- Top Header -->
     <header>
       <div class="top-bar">
@@ -586,16 +774,41 @@
             <span>🔥</span>
             <span id="comboDisplay">x0</span>
           </div>
-          <button class="btn-icon" id="btnAudio" title="聲音開關">🔊</button>
-          <button class="btn-icon" id="btnSync" title="同步試算表最新題庫">🔄</button>
-          <button class="btn-icon" id="btnSettings" title="題庫與遊戲設定">⚙️</button>
+
+          <div class="action-group">
+            <!-- 暫停 / 繼續 -->
+            <button class="btn-pill btn-pause" id="btnPause" title="暫停遊戲">
+              <span id="pauseIcon">⏸️</span>
+              <span class="btn-text" id="pauseText">暫停</span>
+            </button>
+
+            <!-- 單字列表 / 預習卡 -->
+            <button class="btn-pill btn-wordlist" id="btnWordList" title="查看本課單字表">
+              <span>📖</span>
+              <span class="btn-text">單字表</span>
+            </button>
+
+            <!-- Exit 結束 / 結算 -->
+            <button class="btn-pill btn-exit" id="btnExit" title="結束遊戲並結算">
+              <span>🚪</span>
+              <span class="btn-text">Exit</span>
+            </button>
+
+            <!-- 全螢幕切換 -->
+            <button class="btn-icon" id="btnFullscreen" title="全螢幕切換">⛶</button>
+            <!-- 聲音開關 -->
+            <button class="btn-icon" id="btnAudio" title="聲音開關">🔊</button>
+            <!-- 同步試算表 -->
+            <button class="btn-icon" id="btnSync" title="同步試算表最新題庫">🔄</button>
+            <!-- 設定 -->
+            <button class="btn-icon" id="btnSettings" title="題庫與遊戲設定">⚙️</button>
+          </div>
         </div>
       </div>
 
       <!-- Lesson Navigation Buttons -->
       <div class="lesson-bar" id="lessonContainer">
         <div class="lesson-label">📚 課程：</div>
-        <!-- Lesson buttons will be dynamically generated here -->
       </div>
     </header>
 
@@ -609,6 +822,15 @@
     <!-- Canvas Game Area -->
     <div class="canvas-container" id="canvasContainer">
       <canvas id="gameCanvas"></canvas>
+
+      <!-- 暫停畫面 -->
+      <div class="pause-overlay" id="pauseOverlay">
+        <div class="pause-card">
+          <div class="pause-title">⏸️ 遊戲暫停中</div>
+          <p style="color: #666; margin-bottom: 16px;">學生可藉此時間思考或聆聽老師講解！</p>
+          <button class="btn-action btn-save" id="btnResume">▶️ 繼續遊戲</button>
+        </div>
+      </div>
     </div>
 
     <!-- Bottom Controls for Mobile & Touch -->
@@ -635,6 +857,65 @@
 
     <!-- Toast message popup -->
     <div class="toast" id="toastMsg">💡 提示訊息</div>
+
+    <!-- 單字表預習 Modal -->
+    <div class="modal-overlay" id="wordListModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>📖</span>
+            <span id="wordListTitle">本課單字列表</span>
+          </div>
+          <button class="btn-icon" id="btnCloseWordList">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.9rem; color: #666;">點擊右側 🗣️ 喇叭圖示可聆聽美式標準發音：</p>
+          <div class="wordlist-grid" id="wordListContent">
+            <!-- 動態生成單字卡 -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-action btn-save" id="btnWordListClose">開始挑戰！</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exit 結算成績單 Modal -->
+    <div class="modal-overlay" id="settlementModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>🏆</span>
+            <span>遊戲挑戰結算單</span>
+          </div>
+          <button class="btn-icon" id="btnCloseSettlement">✕</button>
+        </div>
+        <div class="modal-body settlement-card">
+          <div class="settlement-trophy">🌟</div>
+          <div class="settlement-score" id="finalScoreDisplay">0 分</div>
+          <div id="finalPraiseText" style="font-weight: 700; color: #FF758C; font-size: 1.15rem; margin-bottom: 12px;">太厲害了！英文小達人！</div>
+
+          <div class="settlement-stats">
+            <div class="stat-box">
+              <span class="stat-label">當前課程</span>
+              <span class="stat-val" id="finalLessonName">Lesson 1</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">答對題數</span>
+              <span class="stat-val" id="finalCorrectCount">0 題</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">最高連擊</span>
+              <span class="stat-val" id="finalMaxCombo">x0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="justify-content: center; gap: 14px;">
+          <button class="btn-action btn-cancel" id="btnExitConfirm">🚪 結束離開</button>
+          <button class="btn-action btn-save" id="btnPlayAgain">🔄 再玩一次</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
@@ -696,7 +977,7 @@
       { lesson: "Lesson 1", english: "Australia", chinese: "澳洲" },
       { lesson: "Lesson 1", english: "from", chinese: "來自" },
 
-      // Lesson 2: 休閒休閒活動
+      // Lesson 2: 休閒活動
       { lesson: "Lesson 2", english: "play basketball", chinese: "打籃球" },
       { lesson: "Lesson 2", english: "play video games", chinese: "打電動遊戲" },
       { lesson: "Lesson 2", english: "ride a bike", chinese: "騎腳踏車" },
@@ -733,14 +1014,13 @@
       { lesson: "Lesson 4", english: "would like", chinese: "想要" }
     ];
 
-    // Google Sheet 預設設定
     const DEFAULT_CONFIG = {
       sheetId: "1CCrHFe4R8xCbdsFjnHc4hlllzohF1NlLZYm_Y-oEndw",
       gid: "1600923188"
     };
 
     /* ==========================================================
-       2. Web Audio API 音效合成器 (零外部依賴、極速無延遲)
+       2. Web Audio API 音效合成器
        ========================================================== */
     class CuteSoundEffects {
       constructor() {
@@ -811,7 +1091,7 @@
       playCorrect() {
         if (!this.enabled) return;
         this.init();
-        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const notes = [523.25, 659.25, 783.99, 1046.50];
         const now = this.ctx.currentTime;
 
         notes.forEach((freq, idx) => {
@@ -854,6 +1134,26 @@
         osc.start(now);
         osc.stop(now + 0.22);
       }
+
+      playVictory() {
+        if (!this.enabled) return;
+        this.init();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        const now = this.ctx.currentTime;
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const time = now + idx * 0.1;
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, time);
+          gain.gain.setValueAtTime(0.25, time);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(time);
+          osc.stop(time + 0.4);
+        });
+      }
     }
 
     const sound = new CuteSoundEffects();
@@ -874,7 +1174,7 @@
     }
 
     /* ==========================================================
-       3. 氣球、子彈、粒子與砲台設計 (支援片語自適應寬度)
+       3. 氣球、子彈、粒子與砲台設計
        ========================================================== */
     const BALLOON_COLORS = [
       { fill: '#FF8DA1', shadow: '#E26D81' },
@@ -887,7 +1187,7 @@
 
     class Balloon {
       constructor(wordObj, x, y, width) {
-        this.word = wordObj; // { lesson, english, chinese }
+        this.word = wordObj;
         this.x = x;
         this.y = y;
         this.baseX = x;
@@ -900,7 +1200,6 @@
         this.targetScale = 1;
         this.wobbleTime = 0;
 
-        // 計算字元長度以動態調整氣球寬度
         const textLen = this.word.english.length;
         if (textLen > 14) {
           this.fontSize = 15;
@@ -932,7 +1231,6 @@
         if (this.x - this.radiusX < 10) this.baseX += 0.5;
         if (this.x + this.radiusX > width - 10) this.baseX -= 0.5;
 
-        // 飛出場外時從下方重新浮起
         if (this.y + this.radiusY < -30) {
           this.y = height + 40;
           this.baseX = 60 + Math.random() * (width - 120);
@@ -954,7 +1252,6 @@
 
         ctx.scale(this.scale, this.scale);
 
-        // 氣球細繩
         ctx.beginPath();
         ctx.moveTo(0, this.radiusY + 6);
         ctx.bezierCurveTo(
@@ -966,13 +1263,11 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // 氣球主體 (橢圓氣球)
         ctx.beginPath();
         ctx.ellipse(0, 0, this.radiusX, this.radiusY, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color.fill;
         ctx.fill();
 
-        // 氣球底部小結
         ctx.beginPath();
         ctx.moveTo(-6, this.radiusY * 0.98);
         ctx.lineTo(6, this.radiusY * 0.98);
@@ -981,13 +1276,11 @@
         ctx.fillStyle = this.color.shadow;
         ctx.fill();
 
-        // 氣球高光立體感
         ctx.beginPath();
         ctx.ellipse(-this.radiusX * 0.35, -this.radiusY * 0.45, this.radiusX * 0.3, this.radiusY * 0.16, -0.4, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
         ctx.fill();
 
-        // 單字白底泡泡標籤
         const wordText = this.word.english;
         ctx.font = `bold ${this.fontSize}px Fredoka, sans-serif`;
         const textWidth = ctx.measureText(wordText).width;
@@ -1004,7 +1297,6 @@
         ctx.fill();
         ctx.shadowColor = 'transparent';
 
-        // 英文文字
         ctx.fillStyle = '#2D3748';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -1036,7 +1328,6 @@
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
 
-        // 閃爍星星飛彈
         ctx.fillStyle = '#FFE066';
         ctx.strokeStyle = '#F59E0B';
         ctx.lineWidth = 2;
@@ -1140,7 +1431,6 @@
         ctx.save();
         ctx.translate(this.x, this.y);
 
-        // 底座
         ctx.beginPath();
         ctx.arc(0, 20, 36, Math.PI, 0);
         ctx.fillStyle = '#FF9A9E';
@@ -1149,7 +1439,6 @@
         ctx.strokeStyle = '#FFFFFF';
         ctx.stroke();
 
-        // 輪盤
         ctx.beginPath();
         ctx.roundRect(-42, 16, 84, 16, 8);
         ctx.fillStyle = '#FEE140';
@@ -1158,7 +1447,6 @@
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // 砲管
         ctx.save();
         ctx.translate(0, 5);
         ctx.rotate(this.angle + Math.PI / 2);
@@ -1187,7 +1475,6 @@
 
         ctx.restore();
 
-        // 中間核心小圓球
         ctx.beginPath();
         ctx.arc(0, 5, 14, 0, Math.PI * 2);
         ctx.fillStyle = '#FF6B81';
@@ -1201,7 +1488,7 @@
     }
 
     /* ==========================================================
-       4. 遊戲主控制器 (含 JSONP 免跨域即時同步 Google Sheet)
+       4. 遊戲主控制器 (包含 Exit、Pause、Word List、全螢幕功能)
        ========================================================== */
     class BalloonGame {
       constructor() {
@@ -1224,11 +1511,15 @@
 
         this.score = 0;
         this.combo = 0;
+        this.maxCombo = 0;
+        this.correctCount = 0;
         this.isProcessingNext = false;
+        this.isPaused = false;
 
         this.keys = { left: false, right: false, space: false };
         this.touchMoveDir = 0;
 
+        // DOM 元素
         this.elScore = document.getElementById('scoreDisplay');
         this.elCombo = document.getElementById('comboDisplay');
         this.elTargetChinese = document.getElementById('targetChinese');
@@ -1238,6 +1529,28 @@
         this.elSettingsBtn = document.getElementById('btnSettings');
         this.elSpeakPromptBtn = document.getElementById('btnSpeakPrompt');
         this.toast = document.getElementById('toastMsg');
+
+        // 新功能按鍵元素
+        this.btnExit = document.getElementById('btnExit');
+        this.btnPause = document.getElementById('btnPause');
+        this.pauseIcon = document.getElementById('pauseIcon');
+        this.pauseText = document.getElementById('pauseText');
+        this.pauseOverlay = document.getElementById('pauseOverlay');
+        this.btnResume = document.getElementById('btnResume');
+        this.btnFullscreen = document.getElementById('btnFullscreen');
+        this.btnWordList = document.getElementById('btnWordList');
+
+        // Modals
+        this.settlementModal = document.getElementById('settlementModal');
+        this.btnCloseSettlement = document.getElementById('btnCloseSettlement');
+        this.btnExitConfirm = document.getElementById('btnExitConfirm');
+        this.btnPlayAgain = document.getElementById('btnPlayAgain');
+
+        this.wordListModal = document.getElementById('wordListModal');
+        this.btnCloseWordList = document.getElementById('btnCloseWordList');
+        this.btnWordListClose = document.getElementById('btnWordListClose');
+        this.wordListTitle = document.getElementById('wordListTitle');
+        this.wordListContent = document.getElementById('wordListContent');
 
         this.modal = document.getElementById('settingsModal');
         this.btnCloseSettings = document.getElementById('btnCloseSettings');
@@ -1268,12 +1581,10 @@
 
         this.loadSettings();
 
-        // 註冊全域 JSONP 回呼函式
         window._handleGoogleSheetData = (data) => {
           this.onGvizReceived(data);
         };
 
-        // 立即同步 Google 試算表最新單字
         this.syncGoogleSheet(false);
 
         requestAnimationFrame((t) => this.gameLoop(t));
@@ -1281,6 +1592,7 @@
 
       bindEvents() {
         window.addEventListener('keydown', (e) => {
+          if (this.isPaused) return;
           if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.keys.left = true;
           if (e.code === 'ArrowRight' || e.code === 'KeyD') this.keys.right = true;
           if (e.code === 'Space' || e.code === 'ArrowUp') {
@@ -1302,8 +1614,8 @@
         const btnRight = document.getElementById('btnRight');
         const btnShoot = document.getElementById('btnShoot');
 
-        const startMoveLeft = (e) => { e.preventDefault(); this.touchMoveDir = -1; };
-        const startMoveRight = (e) => { e.preventDefault(); this.touchMoveDir = 1; };
+        const startMoveLeft = (e) => { e.preventDefault(); if (!this.isPaused) this.touchMoveDir = -1; };
+        const startMoveRight = (e) => { e.preventDefault(); if (!this.isPaused) this.touchMoveDir = 1; };
         const stopMove = (e) => { e.preventDefault(); this.touchMoveDir = 0; };
 
         btnLeft.addEventListener('pointerdown', startMoveLeft);
@@ -1316,10 +1628,11 @@
 
         btnShoot.addEventListener('pointerdown', (e) => {
           e.preventDefault();
-          this.shootBullet();
+          if (!this.isPaused) this.shootBullet();
         });
 
         this.canvas.addEventListener('pointerdown', (e) => {
+          if (this.isPaused) return;
           const rect = this.canvas.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
           const clickY = e.clientY - rect.top;
@@ -1328,12 +1641,67 @@
         });
 
         this.canvas.addEventListener('pointermove', (e) => {
+          if (this.isPaused) return;
           const rect = this.canvas.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
           this.cannon.aimAt(mouseX, mouseY);
         });
 
+        // 暫停 / 繼續
+        this.btnPause.addEventListener('click', () => {
+          this.togglePause();
+        });
+
+        this.btnResume.addEventListener('click', () => {
+          this.togglePause(false);
+        });
+
+        // Exit 結束結算
+        this.btnExit.addEventListener('click', () => {
+          this.showSettlement();
+        });
+
+        this.btnCloseSettlement.addEventListener('click', () => {
+          this.settlementModal.classList.remove('active');
+        });
+
+        this.btnPlayAgain.addEventListener('click', () => {
+          this.settlementModal.classList.remove('active');
+          this.score = 0;
+          this.combo = 0;
+          this.correctCount = 0;
+          this.maxCombo = 0;
+          this.elScore.textContent = '0';
+          this.elCombo.textContent = 'x0';
+          this.loadCurrentLesson();
+          this.showToast('重新開始本課挑戰！');
+        });
+
+        this.btnExitConfirm.addEventListener('click', () => {
+          this.settlementModal.classList.remove('active');
+          this.showToast('感謝遊玩！可以關閉此分頁囉 👋');
+        });
+
+        // 單字表預習卡
+        this.btnWordList.addEventListener('click', () => {
+          this.openWordList();
+        });
+
+        this.btnCloseWordList.addEventListener('click', () => {
+          this.wordListModal.classList.remove('active');
+        });
+
+        this.btnWordListClose.addEventListener('click', () => {
+          this.wordListModal.classList.remove('active');
+        });
+
+        // 全螢幕切換
+        this.btnFullscreen.addEventListener('click', () => {
+          this.toggleFullscreen();
+        });
+
+        // 聲音開關
         this.elAudioBtn.addEventListener('click', () => {
           sound.enabled = !sound.enabled;
           this.elAudioBtn.textContent = sound.enabled ? '🔊' : '🔇';
@@ -1369,6 +1737,76 @@
         });
       }
 
+      togglePause(forcedState = null) {
+        this.isPaused = forcedState !== null ? forcedState : !this.isPaused;
+        if (this.isPaused) {
+          this.pauseOverlay.classList.add('active');
+          this.pauseIcon.textContent = '▶️';
+          this.pauseText.textContent = '繼續';
+        } else {
+          this.pauseOverlay.classList.remove('active');
+          this.pauseIcon.textContent = '⏸️';
+          this.pauseText.textContent = '暫停';
+        }
+      }
+
+      toggleFullscreen() {
+        const wrapper = document.getElementById('gameWrapper');
+        if (!document.fullscreenElement) {
+          wrapper.requestFullscreen().catch(err => {
+            console.warn('全螢幕不支援或被拒絕', err);
+            this.showToast('瀏覽器限制全螢幕操作');
+          });
+          this.btnFullscreen.textContent = '🗗';
+        } else {
+          document.exitFullscreen();
+          this.btnFullscreen.textContent = '⛶';
+        }
+      }
+
+      showSettlement() {
+        sound.playVictory();
+        document.getElementById('finalLessonName').textContent = this.currentLesson;
+        document.getElementById('finalScoreDisplay').textContent = `${this.score} 分`;
+        document.getElementById('finalCorrectCount').textContent = `${this.correctCount} 題`;
+        document.getElementById('finalMaxCombo').textContent = `x${this.maxCombo}`;
+
+        let praise = "太厲害了！英文小達人！🌟🌟🌟";
+        if (this.score >= 100) {
+          praise = "🏆 神乎其技！全對滿分王！👑";
+        } else if (this.score >= 50) {
+          praise = "🎉 表現超棒！單字記得真熟！✨";
+        } else if (this.score === 0) {
+          praise = "加油！再試一次一定會更棒！💪";
+        }
+        document.getElementById('finalPraiseText').textContent = praise;
+        this.settlementModal.classList.add('active');
+      }
+
+      openWordList() {
+        this.wordListTitle.textContent = `📖 ${this.currentLesson} 單字列表`;
+        this.wordListContent.innerHTML = '';
+
+        this.currentLessonWords.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'word-card-item';
+          card.innerHTML = `
+            <div class="word-card-text">
+              <span class="word-card-en">${item.english}</span>
+              <span class="word-card-zh">${item.chinese}</span>
+            </div>
+            <button class="btn-icon" style="width: 32px; height: 32px; font-size: 0.9rem;" title="發音">🗣️</button>
+          `;
+          const spkBtn = card.querySelector('button');
+          spkBtn.addEventListener('click', () => {
+            speakEnglish(item.english);
+          });
+          this.wordListContent.appendChild(card);
+        });
+
+        this.wordListModal.classList.add('active');
+      }
+
       resize() {
         const width = this.container.clientWidth;
         const height = this.container.clientHeight;
@@ -1395,7 +1833,7 @@
       }
 
       /* ==========================================================
-         5. Google 試算表同步 (JSONP 技術，完美支援 file:// 與跨域)
+         5. Google 試算表同步
          ========================================================== */
       loadSettings() {
         const savedSheetId = localStorage.getItem('vocab_sheet_id') || DEFAULT_CONFIG.sheetId;
@@ -1431,7 +1869,6 @@
         this.sheetStatusText.textContent = '連線同步中...';
         this.sheetStatusText.style.color = '#FFA000';
 
-        // 使用 JSONP 動態 Script 標籤（不受 CORS 阻擋，不管是本地 file:// 還是網頁都能完美讀取）
         const oldScript = document.getElementById('gviz-jsonp-script');
         if (oldScript) oldScript.remove();
 
@@ -1459,7 +1896,6 @@
             return;
           }
         }
-        // 預防保護
         this.refreshLessonButtons();
       }
 
@@ -1471,7 +1907,6 @@
           const c1 = r.c[1] && r.c[1].v !== null ? String(r.c[1].v).trim() : '';
           const c2 = r.c[2] && r.c[2].v !== null ? String(r.c[2].v).trim() : '';
 
-          // 略過非單字行（大標題或欄位名稱）
           if (!c1 && !c2) return;
           if (c0.toLowerCase() === 'lesson' || c1.includes('單字') || c2.includes('意思')) return;
 
@@ -1487,7 +1922,7 @@
       }
 
       /* ==========================================================
-         6. 課次切換與題庫出題管理
+         6. 課次切換與循環出題
          ========================================================== */
       refreshLessonButtons() {
         const lessonSet = new Set();
@@ -1597,10 +2032,10 @@
       }
 
       /* ==========================================================
-         7. 射擊與命中判定
+         7. 射擊與碰撞
          ========================================================== */
       shootBullet() {
-        if (!this.cannon) return;
+        if (!this.cannon || this.isPaused) return;
         sound.playShoot();
         this.cannon.recoil = Math.PI;
 
@@ -1653,6 +2088,9 @@
         this.balloons.splice(index, 1);
 
         this.combo++;
+        this.correctCount++;
+        if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+
         const points = 10 + (this.combo > 1 ? (this.combo - 1) * 2 : 0);
         this.score += points;
 
@@ -1700,19 +2138,21 @@
         const width = this.container.clientWidth;
         const height = this.container.clientHeight;
 
-        if (this.keys.left || this.touchMoveDir === -1) {
-          this.cannon.move(-1, 40, width - 40);
-        }
-        if (this.keys.right || this.touchMoveDir === 1) {
-          this.cannon.move(1, 40, width - 40);
+        if (!this.isPaused) {
+          if (this.keys.left || this.touchMoveDir === -1) {
+            this.cannon.move(-1, 40, width - 40);
+          }
+          if (this.keys.right || this.touchMoveDir === 1) {
+            this.cannon.move(1, 40, width - 40);
+          }
         }
 
         this.ctx.clearRect(0, 0, width, height);
 
-        // 背景雲朵
+        // 雲朵
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
         this.clouds.forEach(cloud => {
-          cloud.x += cloud.speed;
+          if (!this.isPaused) cloud.x += cloud.speed;
           if (cloud.x - cloud.size > width) cloud.x = -cloud.size * 2;
 
           this.ctx.beginPath();
@@ -1724,14 +2164,14 @@
 
         // 氣球
         this.balloons.forEach(b => {
-          b.update(width, height);
+          if (!this.isPaused) b.update(width, height);
           b.draw(this.ctx);
         });
 
         // 子彈
         for (let i = this.bullets.length - 1; i >= 0; i--) {
           const bullet = this.bullets[i];
-          bullet.update();
+          if (!this.isPaused) bullet.update();
           bullet.draw(this.ctx);
 
           if (bullet.y < -30 || bullet.x < -30 || bullet.x > width + 30) {
@@ -1739,12 +2179,14 @@
           }
         }
 
-        this.checkCollisions();
+        if (!this.isPaused) {
+          this.checkCollisions();
+        }
 
-        // 爆炸彩帶粒子
+        // 粒子
         for (let i = this.particles.length - 1; i >= 0; i--) {
           const p = this.particles[i];
-          p.update();
+          if (!this.isPaused) p.update();
           p.draw(this.ctx);
           if (p.alpha <= 0) {
             this.particles.splice(i, 1);
