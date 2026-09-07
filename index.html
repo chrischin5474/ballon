@@ -166,7 +166,7 @@
       transform: scale(0.95);
     }
 
-    /* Special Exit & Utility Buttons */
+    /* Action Buttons */
     .btn-pill {
       background: white;
       border: 2px solid #E2E8F0;
@@ -180,6 +180,18 @@
       gap: 4px;
       transition: all 0.2s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+
+    .btn-start-nav {
+      background: linear-gradient(135deg, #10B981, #059669);
+      border-color: #059669;
+      color: white;
+      box-shadow: 0 3px 0 #047857;
+    }
+
+    .btn-start-nav:hover {
+      transform: scale(1.05);
+      background: #059669;
     }
 
     .btn-exit {
@@ -357,6 +369,107 @@
       display: block;
       width: 100%;
       height: 100%;
+    }
+
+    /* Start Overlay (準備開始畫面) */
+    .start-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 30;
+      transition: all 0.3s ease;
+    }
+
+    .start-overlay.hidden {
+      display: none;
+    }
+
+    .start-card {
+      background: white;
+      border: 4px solid #FFD3B6;
+      border-radius: var(--radius-lg);
+      padding: 26px 32px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(255, 117, 140, 0.2);
+    }
+
+    .start-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FF5E7E;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .start-lesson-tag {
+      display: inline-block;
+      background: #FFF0F5;
+      border: 2px solid #FFB6C1;
+      color: #FF2E63;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+
+    .start-rule-box {
+      background: #FFF9F5;
+      border: 2px dashed #FFD3B6;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin: 10px 0 20px 0;
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .btn-big-start {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      border: none;
+      border-radius: 26px;
+      padding: 14px 44px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(16, 185, 129, 0.35);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-big-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 #047857, 0 12px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-big-start:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #047857;
     }
 
     /* Pause Overlay */
@@ -647,12 +760,13 @@
     }
 
     .settlement-stats {
-      display: flex;
-      justify-content: space-around;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       background: #FFF5F7;
       border: 2px dashed #FFB6C1;
       border-radius: 16px;
-      padding: 12px;
+      padding: 14px;
       margin: 16px 0;
     }
 
@@ -660,6 +774,10 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      background: white;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #FFE4E6;
     }
 
     .stat-label {
@@ -671,6 +789,14 @@
       font-size: 1.25rem;
       font-weight: 800;
       color: #333;
+    }
+
+    .stat-val-correct {
+      color: #059669;
+    }
+
+    .stat-val-wrong {
+      color: #E11D48;
     }
 
     /* Notice Toast */
@@ -721,7 +847,6 @@
       100% { opacity: 0; transform: translateY(-60px) scale(1); }
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .action-group .btn-pill span.btn-text {
         display: none;
@@ -776,6 +901,12 @@
           </div>
 
           <div class="action-group">
+            <!-- 開始 / 重新開始 按鈕 -->
+            <button class="btn-pill btn-start-nav" id="btnNavStart" title="開始或重新開始遊戲">
+              <span>🚀</span>
+              <span class="btn-text" id="navStartText">開始</span>
+            </button>
+
             <!-- 暫停 / 繼續 -->
             <button class="btn-pill btn-pause" id="btnPause" title="暫停遊戲">
               <span id="pauseIcon">⏸️</span>
@@ -815,7 +946,7 @@
     <!-- Target Question Banner -->
     <div class="target-banner">
       <div class="target-title">🎯 請射擊：</div>
-      <div class="target-word" id="targetChinese">載入中...</div>
+      <div class="target-word" id="targetChinese">準備開始</div>
       <button class="speak-btn" id="btnSpeakPrompt" title="朗讀目標單字 (提示)">🗣️</button>
     </div>
 
@@ -823,7 +954,38 @@
     <div class="canvas-container" id="canvasContainer">
       <canvas id="gameCanvas"></canvas>
 
-      <!-- 暫停畫面 -->
+      <!-- 準備開始畫面 Overlay -->
+      <div class="start-overlay" id="startOverlay">
+        <div class="start-card">
+          <div class="start-title">
+            <span>🎈</span>
+            <span>英文單字氣球射擊</span>
+          </div>
+          <div class="start-lesson-tag" id="startLessonLabel">挑戰課程：Lesson 1</div>
+          
+          <div class="start-rule-box">
+            <div class="rule-item">
+              <span>🎯</span>
+              <span><strong>答對規則</strong>：擊中正確單字氣球 <strong>+10 分</strong>，連續答對獲連擊加成！</span>
+            </div>
+            <div class="rule-item" style="color: #E11D48;">
+              <span>⚠️</span>
+              <span><strong>答錯扣分</strong>：射中錯誤單字 <strong>扣 5 分</strong>（請看清再發射，禁止亂猜亂按）！</span>
+            </div>
+            <div class="rule-item">
+              <span>🚀</span>
+              <span><strong>操作方式</strong>：左右按鍵平移砲台，點擊發射鍵或直接觸控瞄準氣球！</span>
+            </div>
+          </div>
+
+          <button class="btn-big-start" id="btnBigStart">
+            <span>🚀</span>
+            <span>開始挑戰！</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 暫停畫面 Overlay -->
       <div class="pause-overlay" id="pauseOverlay">
         <div class="pause-card">
           <div class="pause-title">⏸️ 遊戲暫停中</div>
@@ -875,7 +1037,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn-action btn-save" id="btnWordListClose">開始挑戰！</button>
+          <button class="btn-action btn-save" id="btnWordListClose">出發挑戰！</button>
         </div>
       </div>
     </div>
@@ -901,12 +1063,16 @@
               <span class="stat-val" id="finalLessonName">Lesson 1</span>
             </div>
             <div class="stat-box">
-              <span class="stat-label">答對題數</span>
-              <span class="stat-val" id="finalCorrectCount">0 題</span>
-            </div>
-            <div class="stat-box">
               <span class="stat-label">最高連擊</span>
               <span class="stat-val" id="finalMaxCombo">x0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">答對題數 (+10)</span>
+              <span class="stat-val stat-val-correct" id="finalCorrectCount">0 題</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">答錯扣分 (-5)</span>
+              <span class="stat-val stat-val-wrong" id="finalWrongCount">0 次</span>
             </div>
           </div>
         </div>
@@ -1121,18 +1287,19 @@
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
+        // 答錯警示滑稽音
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(260, now);
-        osc.frequency.linearRampToValueAtTime(140, now + 0.22);
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.linearRampToValueAtTime(120, now + 0.25);
 
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
 
         osc.start(now);
-        osc.stop(now + 0.22);
+        osc.stop(now + 0.25);
       }
 
       playVictory() {
@@ -1246,7 +1413,7 @@
         ctx.translate(this.x, this.y);
         
         if (this.wobbleTime > 0) {
-          const angle = Math.sin(this.wobbleTime * 0.8) * 0.25;
+          const angle = Math.sin(this.wobbleTime * 0.8) * 0.28;
           ctx.rotate(angle);
         }
 
@@ -1488,7 +1655,7 @@
     }
 
     /* ==========================================================
-       4. 遊戲主控制器 (包含 Exit、Pause、Word List、全螢幕功能)
+       4. 遊戲主控制器 (包含「開始按鍵」、「答錯扣分」、「防亂按冷卻」)
        ========================================================== */
     class BalloonGame {
       constructor() {
@@ -1509,12 +1676,18 @@
         this.particles = [];
         this.clouds = [];
 
+        // 遊戲運行狀態
+        this.isPlaying = false; // 是否已點擊「開始」
+        this.isPaused = false;
+        this.isProcessingNext = false;
+        this.lastShootTime = 0; // 防亂按射擊冷卻計時器
+
+        // 計分與統計
         this.score = 0;
         this.combo = 0;
         this.maxCombo = 0;
         this.correctCount = 0;
-        this.isProcessingNext = false;
-        this.isPaused = false;
+        this.wrongCount = 0; // 答錯次數統計
 
         this.keys = { left: false, right: false, space: false };
         this.touchMoveDir = 0;
@@ -1530,7 +1703,14 @@
         this.elSpeakPromptBtn = document.getElementById('btnSpeakPrompt');
         this.toast = document.getElementById('toastMsg');
 
-        // 新功能按鍵元素
+        // 開始畫面相關元素
+        this.btnNavStart = document.getElementById('btnNavStart');
+        this.navStartText = document.getElementById('navStartText');
+        this.startOverlay = document.getElementById('startOverlay');
+        this.btnBigStart = document.getElementById('btnBigStart');
+        this.startLessonLabel = document.getElementById('startLessonLabel');
+
+        // 其他功能按鍵元素
         this.btnExit = document.getElementById('btnExit');
         this.btnPause = document.getElementById('btnPause');
         this.pauseIcon = document.getElementById('pauseIcon');
@@ -1587,12 +1767,16 @@
 
         this.syncGoogleSheet(false);
 
+        // 預設進入待命狀態，顯示開始提示卡
+        this.showStartScreen();
+
         requestAnimationFrame((t) => this.gameLoop(t));
       }
 
       bindEvents() {
+        // 鍵盤移動與射擊
         window.addEventListener('keydown', (e) => {
-          if (this.isPaused) return;
+          if (!this.isPlaying || this.isPaused) return;
           if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.keys.left = true;
           if (e.code === 'ArrowRight' || e.code === 'KeyD') this.keys.right = true;
           if (e.code === 'Space' || e.code === 'ArrowUp') {
@@ -1614,8 +1798,8 @@
         const btnRight = document.getElementById('btnRight');
         const btnShoot = document.getElementById('btnShoot');
 
-        const startMoveLeft = (e) => { e.preventDefault(); if (!this.isPaused) this.touchMoveDir = -1; };
-        const startMoveRight = (e) => { e.preventDefault(); if (!this.isPaused) this.touchMoveDir = 1; };
+        const startMoveLeft = (e) => { e.preventDefault(); if (this.isPlaying && !this.isPaused) this.touchMoveDir = -1; };
+        const startMoveRight = (e) => { e.preventDefault(); if (this.isPlaying && !this.isPaused) this.touchMoveDir = 1; };
         const stopMove = (e) => { e.preventDefault(); this.touchMoveDir = 0; };
 
         btnLeft.addEventListener('pointerdown', startMoveLeft);
@@ -1628,11 +1812,13 @@
 
         btnShoot.addEventListener('pointerdown', (e) => {
           e.preventDefault();
-          if (!this.isPaused) this.shootBullet();
+          if (this.isPlaying && !this.isPaused) {
+            this.shootBullet();
+          }
         });
 
         this.canvas.addEventListener('pointerdown', (e) => {
-          if (this.isPaused) return;
+          if (!this.isPlaying || this.isPaused) return;
           const rect = this.canvas.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
           const clickY = e.clientY - rect.top;
@@ -1641,15 +1827,35 @@
         });
 
         this.canvas.addEventListener('pointermove', (e) => {
-          if (this.isPaused) return;
+          if (!this.isPlaying || this.isPaused) return;
           const rect = this.canvas.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
           this.cannon.aimAt(mouseX, mouseY);
         });
 
+        // 開始按鍵 (頂部導覽列按鈕 & 畫面中央大按鈕)
+        this.btnBigStart.addEventListener('click', () => {
+          this.startGame();
+        });
+
+        this.btnNavStart.addEventListener('click', () => {
+          if (!this.isPlaying) {
+            this.startGame();
+          } else {
+            // 已在遊戲中點擊，則重新開始本課挑戰
+            if (confirm('要重新開始本課挑戰嗎？目前分數將會重設。')) {
+              this.startGame();
+            }
+          }
+        });
+
         // 暫停 / 繼續
         this.btnPause.addEventListener('click', () => {
+          if (!this.isPlaying) {
+            this.showToast('請先點擊「開始」進入遊戲！');
+            return;
+          }
           this.togglePause();
         });
 
@@ -1668,19 +1874,13 @@
 
         this.btnPlayAgain.addEventListener('click', () => {
           this.settlementModal.classList.remove('active');
-          this.score = 0;
-          this.combo = 0;
-          this.correctCount = 0;
-          this.maxCombo = 0;
-          this.elScore.textContent = '0';
-          this.elCombo.textContent = 'x0';
-          this.loadCurrentLesson();
-          this.showToast('重新開始本課挑戰！');
+          this.startGame();
         });
 
         this.btnExitConfirm.addEventListener('click', () => {
           this.settlementModal.classList.remove('active');
-          this.showToast('感謝遊玩！可以關閉此分頁囉 👋');
+          this.showStartScreen();
+          this.showToast('遊戲已重設，隨時可再次點擊「開始」挑戰！');
         });
 
         // 單字表預習卡
@@ -1694,6 +1894,9 @@
 
         this.btnWordListClose.addEventListener('click', () => {
           this.wordListModal.classList.remove('active');
+          if (!this.isPlaying) {
+            this.startGame();
+          }
         });
 
         // 全螢幕切換
@@ -1737,6 +1940,45 @@
         });
       }
 
+      /* ==========================================================
+         遊戲開始與狀態控制
+         ========================================================== */
+      showStartScreen() {
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.startOverlay.classList.remove('hidden');
+        this.pauseOverlay.classList.remove('active');
+        this.startLessonLabel.textContent = `挑戰課程：${this.currentLesson}`;
+        this.navStartText.textContent = '開始';
+        this.elTargetChinese.textContent = '點擊開始';
+        this.balloons = [];
+        this.bullets = [];
+        this.particles = [];
+      }
+
+      startGame() {
+        this.isPlaying = true;
+        this.isPaused = false;
+        this.startOverlay.classList.add('hidden');
+        this.pauseOverlay.classList.remove('active');
+        this.pauseIcon.textContent = '⏸️';
+        this.pauseText.textContent = '暫停';
+        this.navStartText.textContent = '重新開始';
+
+        // 重設計分統計
+        this.score = 0;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.correctCount = 0;
+        this.wrongCount = 0;
+        this.elScore.textContent = '0';
+        this.elCombo.textContent = 'x0';
+
+        // 載入當前課程題目
+        this.loadCurrentLesson();
+        this.showToast(`🚀 ${this.currentLesson} 開始！看清楚題目再射擊唷！`);
+      }
+
       togglePause(forcedState = null) {
         this.isPaused = forcedState !== null ? forcedState : !this.isPaused;
         if (this.isPaused) {
@@ -1766,18 +2008,22 @@
 
       showSettlement() {
         sound.playVictory();
+        this.isPlaying = false;
         document.getElementById('finalLessonName').textContent = this.currentLesson;
         document.getElementById('finalScoreDisplay').textContent = `${this.score} 分`;
         document.getElementById('finalCorrectCount').textContent = `${this.correctCount} 題`;
+        document.getElementById('finalWrongCount').textContent = `${this.wrongCount} 次`;
         document.getElementById('finalMaxCombo').textContent = `x${this.maxCombo}`;
 
         let praise = "太厲害了！英文小達人！🌟🌟🌟";
-        if (this.score >= 100) {
-          praise = "🏆 神乎其技！全對滿分王！👑";
-        } else if (this.score >= 50) {
-          praise = "🎉 表現超棒！單字記得真熟！✨";
+        if (this.wrongCount === 0 && this.correctCount >= 5) {
+          praise = "👑 零失誤滿分神射手！太不可思議了！✨";
+        } else if (this.score >= 80) {
+          praise = "🏆 表現優異！單字記得滾瓜爛熟！🎉";
+        } else if (this.wrongCount > this.correctCount) {
+          praise = "⚠️ 射擊前要先看清楚中文題目，不要亂猜喔！加油！💪";
         } else if (this.score === 0) {
-          praise = "加油！再試一次一定會更棒！💪";
+          praise = "加油！別著急，再仔細挑戰一次一定能拿到高分！🌟";
         }
         document.getElementById('finalPraiseText').textContent = praise;
         this.settlementModal.classList.add('active');
@@ -1787,7 +2033,10 @@
         this.wordListTitle.textContent = `📖 ${this.currentLesson} 單字列表`;
         this.wordListContent.innerHTML = '';
 
-        this.currentLessonWords.forEach(item => {
+        const words = this.allVocab.filter(item => item.lesson.trim() === this.currentLesson);
+        const listToDisplay = words.length > 0 ? words : this.allVocab;
+
+        listToDisplay.forEach(item => {
           const card = document.createElement('div');
           card.className = 'word-card-item';
           card.innerHTML = `
@@ -1949,8 +2198,6 @@
 
         if (!this.lessons.includes(this.currentLesson)) {
           this.switchLesson(this.lessons[0]);
-        } else {
-          this.loadCurrentLesson();
         }
       }
 
@@ -1966,8 +2213,9 @@
           }
         });
 
-        this.loadCurrentLesson();
-        this.showToast(`已切換至 ${lessonName}！`);
+        // 切換課次時重設為待命狀態，讓學生點擊「開始」
+        this.showStartScreen();
+        this.showToast(`已切換至 ${lessonName}，點擊「開始」出發！`);
       }
 
       loadCurrentLesson() {
@@ -2032,10 +2280,18 @@
       }
 
       /* ==========================================================
-         7. 射擊與碰撞
+         7. 射擊與碰撞 (防亂按冷卻機制 & 答錯扣分)
          ========================================================== */
       shootBullet() {
-        if (!this.cannon || this.isPaused) return;
+        if (!this.cannon || !this.isPlaying || this.isPaused) return;
+
+        // 防狂按冷卻：間隔必須大於 300 毫秒
+        const now = Date.now();
+        if (now - this.lastShootTime < 300) {
+          return;
+        }
+        this.lastShootTime = now;
+
         sound.playShoot();
         this.cannon.recoil = Math.PI;
 
@@ -2097,22 +2353,30 @@
         this.elScore.textContent = this.score;
         this.elCombo.textContent = `x${this.combo}`;
 
-        this.createFloatingFeedback(balloon.x, balloon.y, `+${points} GREAT! 🎉`, '#FF2E63');
+        this.createFloatingFeedback(balloon.x, balloon.y, `+${points} GREAT! 🎉`, '#10B981');
 
         speakEnglish(this.currentWord.english);
 
         setTimeout(() => {
-          this.nextQuestion();
+          if (this.isPlaying) {
+            this.nextQuestion();
+          }
         }, 1200);
       }
 
       handleWrongHit(balloon) {
         sound.playWrong();
-        balloon.wobbleTime = 20;
+        balloon.wobbleTime = 22; // 氣球滑稽抖動
         this.combo = 0;
+        this.wrongCount++;
         this.elCombo.textContent = 'x0';
 
-        this.createFloatingFeedback(balloon.x, balloon.y, `Oops! 這是 ${balloon.word.chinese}`, '#555');
+        // 答錯扣 5 分，分數不低於 0
+        const penalty = 5;
+        this.score = Math.max(0, this.score - penalty);
+        this.elScore.textContent = this.score;
+
+        this.createFloatingFeedback(balloon.x, balloon.y, `-${penalty}分 答錯囉！這是【${balloon.word.chinese}】`, '#E11D48');
       }
 
       createFloatingFeedback(x, y, text, color) {
@@ -2128,7 +2392,7 @@
 
         setTimeout(() => {
           if (el.parentNode) el.parentNode.removeChild(el);
-        }, 1000);
+        }, 1200);
       }
 
       /* ==========================================================
@@ -2138,7 +2402,7 @@
         const width = this.container.clientWidth;
         const height = this.container.clientHeight;
 
-        if (!this.isPaused) {
+        if (this.isPlaying && !this.isPaused) {
           if (this.keys.left || this.touchMoveDir === -1) {
             this.cannon.move(-1, 40, width - 40);
           }
@@ -2162,28 +2426,30 @@
           this.ctx.fill();
         });
 
-        // 氣球
-        this.balloons.forEach(b => {
-          if (!this.isPaused) b.update(width, height);
-          b.draw(this.ctx);
-        });
+        // 氣球 (遊戲進行中才更新與繪製)
+        if (this.isPlaying) {
+          this.balloons.forEach(b => {
+            if (!this.isPaused) b.update(width, height);
+            b.draw(this.ctx);
+          });
 
-        // 子彈
-        for (let i = this.bullets.length - 1; i >= 0; i--) {
-          const bullet = this.bullets[i];
-          if (!this.isPaused) bullet.update();
-          bullet.draw(this.ctx);
+          // 子彈
+          for (let i = this.bullets.length - 1; i >= 0; i--) {
+            const bullet = this.bullets[i];
+            if (!this.isPaused) bullet.update();
+            bullet.draw(this.ctx);
 
-          if (bullet.y < -30 || bullet.x < -30 || bullet.x > width + 30) {
-            this.bullets.splice(i, 1);
+            if (bullet.y < -30 || bullet.x < -30 || bullet.x > width + 30) {
+              this.bullets.splice(i, 1);
+            }
+          }
+
+          if (!this.isPaused) {
+            this.checkCollisions();
           }
         }
 
-        if (!this.isPaused) {
-          this.checkCollisions();
-        }
-
-        // 粒子
+        // 爆炸彩帶粒子
         for (let i = this.particles.length - 1; i >= 0; i--) {
           const p = this.particles[i];
           if (!this.isPaused) p.update();
