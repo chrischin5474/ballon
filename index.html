@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎈 可愛單字氣球射擊大冒險 | Balloon Vocab Pop</title>
+  <!-- Google Fonts: Fredoka & Quicksand for cute rounded typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #FF758C;
+      --primary-dark: #E65C73;
+      --secondary: #FF7EB3;
+      --accent-yellow: #FFE066;
+      --accent-mint: #62D2A2;
+      --accent-blue: #54A0FF;
+      --accent-purple: #B388FF;
+      --bg-cream: #FFFDF9;
+      --text-main: #4A4E69;
+      --text-light: #9A8C98;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-shadow: 0 10px 30px rgba(255, 117, 140, 0.15);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Fredoka', 'Noto Sans TC', system-ui, sans-serif;
+      background: linear-gradient(135deg, #FFE5EC 0%, #E3F2FD 50%, #E8F5E9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      overflow-x: hidden;
+      padding: 8px;
+    }
+
+    /* Main Container */
+    .game-wrapper {
+      width: 100%;
+      max-width: 980px;
+      height: 96vh;
+      max-height: 880px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--card-shadow), 0 0 0 4px rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Top Navigation & Status */
+    header {
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.88);
+      border-bottom: 2px solid rgba(255, 182, 193, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .game-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #FF5E7E;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-shadow: 1px 1px 0 #FFF;
+    }
+
+    .game-title span.emoji {
+      font-size: 1.6rem;
+      animation: gentle-bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px) scale(1.05); }
+    }
+
+    .status-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      background: #FFF;
+      border: 2px solid rgba(255, 117, 140, 0.25);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .badge-score {
+      color: #FF758C;
+      border-color: #FFB6C1;
+    }
+
+    .badge-combo {
+      color: #FFA000;
+      border-color: #FFE082;
+      background: #FFFDE7;
+    }
+
+    .btn-icon {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .btn-icon:hover {
+      transform: scale(1.1);
+      border-color: var(--primary);
+    }
+
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
+
+    /* Lesson Selection Bar */
+    .lesson-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: thin;
+    }
+
+    .lesson-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .lesson-bar::-webkit-scrollbar-thumb {
+      background: #FFB6C1;
+      border-radius: 4px;
+    }
+
+    .lesson-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #718096;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lesson-btn {
+      padding: 6px 14px;
+      border: 2px solid #FFD3B6;
+      background: white;
+      color: #666;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 0 #FFD3B6;
+    }
+
+    .lesson-btn:hover {
+      background: #FFF9F5;
+      transform: translateY(-1px);
+    }
+
+    .lesson-btn.active {
+      background: linear-gradient(135deg, #FF758C, #FF7EB3);
+      color: white;
+      border-color: #FF5E7E;
+      box-shadow: 0 3px 0 #E04868;
+      transform: translateY(1px);
+    }
+
+    /* Target Prompt Banner */
+    .target-banner {
+      background: linear-gradient(90deg, #FFF0F5, #E8F5E9, #E3F2FD);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      position: relative;
+      z-index: 5;
+    }
+
+    .target-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #6C5CE7;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .target-word {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #FF2E63;
+      letter-spacing: 1px;
+      background: white;
+      padding: 4px 18px;
+      border-radius: 24px;
+      border: 3px dashed #FF758C;
+      box-shadow: 0 3px 8px rgba(255, 46, 99, 0.15);
+      animation: pulse-word 1.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-word {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    .speak-btn {
+      background: #FFECB3;
+      border: 2px solid #FFD54F;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      box-shadow: 0 3px 0 #FFCA28;
+    }
+
+    .speak-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .speak-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #FFCA28;
+    }
+
+    /* Canvas Arena */
+    .canvas-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(180deg, #E0F7FA 0%, #FFF9C4 70%, #C8E6C9 100%);
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Mobile On-Screen Controls */
+    .mobile-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border-top: 2px solid rgba(255, 182, 193, 0.3);
+      z-index: 10;
+      gap: 12px;
+    }
+
+    .d-pad {
+      display: flex;
+      gap: 12px;
+    }
+
+    .control-btn {
+      width: 62px;
+      height: 52px;
+      border-radius: 18px;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    }
+
+    .control-btn:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    .btn-move {
+      background: #81D4FA;
+      color: #0277BD;
+      box-shadow: 0 4px 0 #4FC3F7;
+    }
+
+    .btn-shoot {
+      flex: 1;
+      max-width: 240px;
+      height: 52px;
+      background: linear-gradient(135deg, #FF6B8B, #FF8E53);
+      color: white;
+      font-size: 1.25rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 0 #E65100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-shoot:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    .keyboard-hint {
+      font-size: 0.85rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .key-badge {
+      background: #EEE;
+      border: 1px solid #CCC;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 4px solid #FFD3B6;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      color: #FF5E7E;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .input-group {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-weight: 700;
+      color: #4A4E69;
+      font-size: 0.9rem;
+    }
+
+    .input-text {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #E2E8F0;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-text:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-cancel {
+      background: #F1F5F9;
+      color: #64748B;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #FF758C, #FF7EB3);
+      color: white;
+      box-shadow: 0 4px 0 #E04868;
+    }
+
+    .btn-save:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+
+    /* Notice Toast */
+    .toast {
+      position: absolute;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(45, 52, 54, 0.9);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Help Alert Box inside modal */
+    .tip-box {
+      background: #FFF8E1;
+      border-left: 4px solid #FFC107;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 0.88rem;
+    }
+
+    /* Floating Feedback Text on Canvas */
+    .floating-text-item {
+      position: absolute;
+      pointer-events: none;
+      font-weight: 900;
+      animation: float-up-fade 1s forwards ease-out;
+    }
+
+    @keyframes float-up-fade {
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      50% { transform: translateY(-30px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-60px) scale(1); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .game-wrapper {
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+      }
+      .game-title {
+        font-size: 1.1rem;
+      }
+      .target-word {
+        font-size: 1.25rem;
+        padding: 3px 12px;
+      }
+      .keyboard-hint {
+        display: none;
+      }
+      .control-btn {
+        width: 52px;
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-wrapper">
+    <!-- Top Header -->
+    <header>
+      <div class="top-bar">
+        <div class="game-title">
+          <span class="emoji">🎈</span>
+          <span>氣球單字射擊</span>
+        </div>
+
+        <div class="status-badges">
+          <div class="badge badge-score" title="目前得分">
+            <span>⭐</span>
+            <span id="scoreDisplay">0</span>
+          </div>
+          <div class="badge badge-combo" title="連續答對">
+            <span>🔥</span>
+            <span id="comboDisplay">x0</span>
+          </div>
+          <button class="btn-icon" id="btnAudio" title="聲音開關">🔊</button>
+          <button class="btn-icon" id="btnSync" title="同步試算表最新題庫">🔄</button>
+          <button class="btn-icon" id="btnSettings" title="題庫與遊戲設定">⚙️</button>
+        </div>
+      </div>
+
+      <!-- Lesson Navigation Buttons -->
+      <div class="lesson-bar" id="lessonContainer">
+        <div class="lesson-label">📚 課程：</div>
+        <!-- Lesson buttons will be dynamically generated here -->
+      </div>
+    </header>
+
+    <!-- Target Question Banner -->
+    <div class="target-banner">
+      <div class="target-title">🎯 請射擊：</div>
+      <div class="target-word" id="targetChinese">載入中...</div>
+      <button class="speak-btn" id="btnSpeakPrompt" title="朗讀目標單字 (提示)">🗣️</button>
+    </div>
+
+    <!-- Canvas Game Area -->
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <!-- Bottom Controls for Mobile & Touch -->
+    <div class="mobile-controls">
+      <div class="d-pad">
+        <button class="control-btn btn-move" id="btnLeft" title="向左移動">◀</button>
+        <button class="control-btn btn-move" id="btnRight" title="向右移動">▶</button>
+      </div>
+
+      <button class="control-btn btn-shoot" id="btnShoot" title="發射飛彈">
+        <span>🚀</span>
+        <span>發射！</span>
+      </button>
+
+      <div class="keyboard-hint">
+        <span>鍵盤</span>
+        <span class="key-badge">←</span>
+        <span class="key-badge">→</span>
+        <span>或</span>
+        <span class="key-badge">Space</span>
+        <span>發射 / 滑鼠瞄準點擊</span>
+      </div>
+    </div>
+
+    <!-- Toast message popup -->
+    <div class="toast" id="toastMsg">💡 提示訊息</div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>⚙️</span>
+            <span>雲端題庫與設定</span>
+          </div>
+          <button class="btn-icon" id="btnCloseSettings">✕</button>
+        </div>
+        <div class="modal-body">
+          <p>遊戲會自動連線讀取 Google 試算表作為後台題庫，方便老師隨時增減單字！</p>
+          
+          <div class="input-group">
+            <label for="inputSheetUrl">Google 試算表連結或 ID：</label>
+            <input type="text" class="input-text" id="inputSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
+          </div>
+
+          <div class="input-group">
+            <label for="inputSheetGid">工作表 GID（分頁編號）：</label>
+            <input type="text" class="input-text" id="inputSheetGid" placeholder="1600923188">
+          </div>
+
+          <div class="tip-box">
+            <strong>⚠️ 試算表設定說明：</strong><br>
+            您的試算表已成功公開！點擊下方「儲存並同步」或主畫面「🔄」隨時抓取最新單字。<br><br>
+            <strong>📄 建議欄位格式：</strong><br>
+            • 欄 A: <strong>課次</strong> (例：Lesson 1)<br>
+            • 欄 B: <strong>英文單字</strong> (例：the USA)<br>
+            • 欄 C: <strong>中文解釋</strong> (例：美國)
+          </div>
+
+          <div style="margin-top: 14px; font-size: 0.88rem; color: #777;">
+            連線狀態：<span id="sheetStatusText" style="font-weight: 700;">檢查中...</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-action btn-cancel" id="btnResetDefault">恢復預設</button>
+          <button class="btn-action btn-save" id="btnSaveSettings">儲存並同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================
+       1. 題庫資料：內建使用者 Google Sheet「Super Fun 7」完整單字
+       ========================================================== */
+    const DEFAULT_VOCAB_DATA = [
+      // Lesson 1: 國家與出處
+      { lesson: "Lesson 1", english: "the USA", chinese: "美國" },
+      { lesson: "Lesson 1", english: "the UK", chinese: "英國" },
+      { lesson: "Lesson 1", english: "France", chinese: "法國" },
+      { lesson: "Lesson 1", english: "Vietnam", chinese: "越南" },
+      { lesson: "Lesson 1", english: "Korea", chinese: "韓國" },
+      { lesson: "Lesson 1", english: "Japan", chinese: "日本" },
+      { lesson: "Lesson 1", english: "Taiwan", chinese: "臺灣" },
+      { lesson: "Lesson 1", english: "Australia", chinese: "澳洲" },
+      { lesson: "Lesson 1", english: "from", chinese: "來自" },
+
+      // Lesson 2: 休閒休閒活動
+      { lesson: "Lesson 2", english: "play basketball", chinese: "打籃球" },
+      { lesson: "Lesson 2", english: "play video games", chinese: "打電動遊戲" },
+      { lesson: "Lesson 2", english: "ride a bike", chinese: "騎腳踏車" },
+      { lesson: "Lesson 2", english: "visit my friend", chinese: "拜訪朋友" },
+      { lesson: "Lesson 2", english: "watch TV", chinese: "看電視" },
+      { lesson: "Lesson 2", english: "go shopping", chinese: "逛街購物" },
+      { lesson: "Lesson 2", english: "go camping", chinese: "露營" },
+      { lesson: "Lesson 2", english: "free time", chinese: "空閒時間" },
+
+      // Lesson 3: 食物、點心與數量
+      { lesson: "Lesson 3", english: "eggs", chinese: "雞蛋（複數）" },
+      { lesson: "Lesson 3", english: "oranges", chinese: "柳橙（複數）" },
+      { lesson: "Lesson 3", english: "strawberries", chinese: "草莓（複數）" },
+      { lesson: "Lesson 3", english: "watermelons", chinese: "西瓜（複數）" },
+      { lesson: "Lesson 3", english: "cookies", chinese: "餅乾（複數）" },
+      { lesson: "Lesson 3", english: "hamburgers", chinese: "漢堡（複數）" },
+      { lesson: "Lesson 3", english: "hot dogs", chinese: "熱狗（複數）" },
+      { lesson: "Lesson 3", english: "sandwiches", chinese: "三明治（複數）" },
+      { lesson: "Lesson 3", english: "how many", chinese: "幾個" },
+      { lesson: "Lesson 3", english: "need", chinese: "需要" },
+      { lesson: "Lesson 3", english: "how much", chinese: "多少錢" },
+      { lesson: "Lesson 3", english: "dollar", chinese: "元（貨幣單位）" },
+      { lesson: "Lesson 3", english: "hundred", chinese: "百（數字）" },
+
+      // Lesson 4: 三餐與食物
+      { lesson: "Lesson 4", english: "breakfast", chinese: "早餐" },
+      { lesson: "Lesson 4", english: "rice", chinese: "米飯" },
+      { lesson: "Lesson 4", english: "soup", chinese: "湯" },
+      { lesson: "Lesson 4", english: "lunch", chinese: "午餐" },
+      { lesson: "Lesson 4", english: "noodles", chinese: "麵" },
+      { lesson: "Lesson 4", english: "dinner", chinese: "晚餐" },
+      { lesson: "Lesson 4", english: "bread", chinese: "麵包" },
+      { lesson: "Lesson 4", english: "chicken", chinese: "雞肉" },
+      { lesson: "Lesson 4", english: "would like", chinese: "想要" }
+    ];
+
+    // Google Sheet 預設設定
+    const DEFAULT_CONFIG = {
+      sheetId: "1CCrHFe4R8xCbdsFjnHc4hlllzohF1NlLZYm_Y-oEndw",
+      gid: "1600923188"
+    };
+
+    /* ==========================================================
+       2. Web Audio API 音效合成器 (零外部依賴、極速無延遲)
+       ========================================================== */
+    class CuteSoundEffects {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playShoot() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+
+      playPop() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const bufferSize = this.ctx.sampleRate * 0.05;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+        }
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, now);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        noise.start(now);
+      }
+
+      playCorrect() {
+        if (!this.enabled) return;
+        this.init();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const now = this.ctx.currentTime;
+
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const time = now + idx * 0.07;
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, time);
+
+          gain.gain.setValueAtTime(0, time);
+          gain.gain.linearRampToValueAtTime(0.2, time + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + 0.35);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(time);
+          osc.stop(time + 0.35);
+        });
+      }
+
+      playWrong() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.linearRampToValueAtTime(140, now + 0.22);
+
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+    }
+
+    const sound = new CuteSoundEffects();
+
+    function speakEnglish(word) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.85;
+      utterance.pitch = 1.1;
+
+      const voices = window.speechSynthesis.getVoices();
+      const usVoice = voices.find(v => (v.lang === 'en-US' || v.lang.includes('US')) && !v.name.includes('Bad'));
+      if (usVoice) utterance.voice = usVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    /* ==========================================================
+       3. 氣球、子彈、粒子與砲台設計 (支援片語自適應寬度)
+       ========================================================== */
+    const BALLOON_COLORS = [
+      { fill: '#FF8DA1', shadow: '#E26D81' },
+      { fill: '#6EE7B7', shadow: '#34D399' },
+      { fill: '#60A5FA', shadow: '#3B82F6' },
+      { fill: '#FBBF24', shadow: '#F59E0B' },
+      { fill: '#C084FC', shadow: '#A855F7' },
+      { fill: '#FB923C', shadow: '#EA580C' }
+    ];
+
+    class Balloon {
+      constructor(wordObj, x, y, width) {
+        this.word = wordObj; // { lesson, english, chinese }
+        this.x = x;
+        this.y = y;
+        this.baseX = x;
+        this.color = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+        this.speedY = -(0.45 + Math.random() * 0.4);
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swaySpeed = 0.02 + Math.random() * 0.02;
+        this.swayDistance = 25 + Math.random() * 20;
+        this.scale = 0;
+        this.targetScale = 1;
+        this.wobbleTime = 0;
+
+        // 計算字元長度以動態調整氣球寬度
+        const textLen = this.word.english.length;
+        if (textLen > 14) {
+          this.fontSize = 15;
+          this.radiusX = 58;
+          this.radiusY = 46;
+          this.radius = 52;
+        } else if (textLen > 8) {
+          this.fontSize = 17;
+          this.radiusX = 48;
+          this.radiusY = 44;
+          this.radius = 46;
+        } else {
+          this.fontSize = 20;
+          this.radiusX = 40;
+          this.radiusY = 46;
+          this.radius = 42;
+        }
+      }
+
+      update(width, height) {
+        if (this.scale < this.targetScale) {
+          this.scale += 0.05;
+        }
+
+        this.y += this.speedY;
+        this.swayAngle += this.swaySpeed;
+        this.x = this.baseX + Math.sin(this.swayAngle) * this.swayDistance;
+
+        if (this.x - this.radiusX < 10) this.baseX += 0.5;
+        if (this.x + this.radiusX > width - 10) this.baseX -= 0.5;
+
+        // 飛出場外時從下方重新浮起
+        if (this.y + this.radiusY < -30) {
+          this.y = height + 40;
+          this.baseX = 60 + Math.random() * (width - 120);
+        }
+
+        if (this.wobbleTime > 0) {
+          this.wobbleTime--;
+        }
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        
+        if (this.wobbleTime > 0) {
+          const angle = Math.sin(this.wobbleTime * 0.8) * 0.25;
+          ctx.rotate(angle);
+        }
+
+        ctx.scale(this.scale, this.scale);
+
+        // 氣球細繩
+        ctx.beginPath();
+        ctx.moveTo(0, this.radiusY + 6);
+        ctx.bezierCurveTo(
+          Math.sin(this.swayAngle) * 12, this.radiusY + 20,
+          -Math.sin(this.swayAngle) * 12, this.radiusY + 35,
+          0, this.radiusY + 45
+        );
+        ctx.strokeStyle = '#BBB';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 氣球主體 (橢圓氣球)
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.radiusX, this.radiusY, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color.fill;
+        ctx.fill();
+
+        // 氣球底部小結
+        ctx.beginPath();
+        ctx.moveTo(-6, this.radiusY * 0.98);
+        ctx.lineTo(6, this.radiusY * 0.98);
+        ctx.lineTo(0, this.radiusY * 1.08);
+        ctx.closePath();
+        ctx.fillStyle = this.color.shadow;
+        ctx.fill();
+
+        // 氣球高光立體感
+        ctx.beginPath();
+        ctx.ellipse(-this.radiusX * 0.35, -this.radiusY * 0.45, this.radiusX * 0.3, this.radiusY * 0.16, -0.4, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+        ctx.fill();
+
+        // 單字白底泡泡標籤
+        const wordText = this.word.english;
+        ctx.font = `bold ${this.fontSize}px Fredoka, sans-serif`;
+        const textWidth = ctx.measureText(wordText).width;
+        const boxPadding = 9;
+        const boxW = Math.max(textWidth + boxPadding * 2, 54);
+        const boxH = this.fontSize + 10;
+
+        ctx.beginPath();
+        ctx.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, 12);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+        ctx.shadowColor = 'rgba(0,0,0,0.12)';
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetY = 2;
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+
+        // 英文文字
+        ctx.fillStyle = '#2D3748';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(wordText, 0, 1);
+
+        ctx.restore();
+      }
+    }
+
+    class Bullet {
+      constructor(x, y, angle) {
+        this.x = x;
+        this.y = y;
+        this.speed = 15;
+        this.vx = Math.cos(angle) * this.speed;
+        this.vy = Math.sin(angle) * this.speed;
+        this.radius = 8;
+        this.rotation = 0;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += 0.2;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        // 閃爍星星飛彈
+        ctx.fillStyle = '#FFE066';
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 2;
+
+        const spikes = 5;
+        const outerRadius = 10;
+        const innerRadius = 5;
+        let rot = Math.PI / 2 * 3;
+        const step = Math.PI / spikes;
+
+        ctx.beginPath();
+        ctx.moveTo(0, -outerRadius);
+        for (let i = 0; i < spikes; i++) {
+          let x = Math.cos(rot) * outerRadius;
+          let y = Math.sin(rot) * outerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+
+          x = Math.cos(rot) * innerRadius;
+          y = Math.sin(rot) * innerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+        }
+        ctx.lineTo(0, -outerRadius);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 12;
+        this.vy = (Math.random() - 0.5) * 12 - 2;
+        this.color = color;
+        this.size = 5 + Math.random() * 6;
+        this.alpha = 1;
+        this.decay = 0.02 + Math.random() * 0.02;
+        this.gravity = 0.25;
+        this.shape = Math.random() > 0.5 ? 'circle' : 'rect';
+        this.rotation = Math.random() * Math.PI * 2;
+        this.vRot = (Math.random() - 0.5) * 0.3;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.gravity;
+        this.rotation += this.vRot;
+        this.alpha -= this.decay;
+      }
+
+      draw(ctx) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = this.color;
+
+        if (this.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        }
+        ctx.restore();
+      }
+    }
+
+    class CuteCannon {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.angle = -Math.PI / 2;
+        this.speed = 7;
+        this.recoil = 0;
+      }
+
+      move(dir, minX, maxX) {
+        this.x += dir * this.speed;
+        if (this.x < minX) this.x = minX;
+        if (this.x > maxX) this.x = maxX;
+      }
+
+      aimAt(targetX, targetY) {
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        let angle = Math.atan2(dy, dx);
+        if (angle > -0.2) angle = -0.2;
+        if (angle < -Math.PI + 0.2) angle = -Math.PI + 0.2;
+        this.angle = angle;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        // 底座
+        ctx.beginPath();
+        ctx.arc(0, 20, 36, Math.PI, 0);
+        ctx.fillStyle = '#FF9A9E';
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.stroke();
+
+        // 輪盤
+        ctx.beginPath();
+        ctx.roundRect(-42, 16, 84, 16, 8);
+        ctx.fillStyle = '#FEE140';
+        ctx.fill();
+        ctx.strokeStyle = '#FFA000';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // 砲管
+        ctx.save();
+        ctx.translate(0, 5);
+        ctx.rotate(this.angle + Math.PI / 2);
+
+        const recoilOffset = Math.sin(this.recoil) * 8;
+        if (this.recoil > 0) this.recoil -= 0.25;
+
+        ctx.beginPath();
+        ctx.roundRect(-14, -40 + recoilOffset, 28, 44, [8, 8, 4, 4]);
+        ctx.fillStyle = '#70A1FF';
+        ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.roundRect(-17, -46 + recoilOffset, 34, 10, 5);
+        ctx.fillStyle = '#FF6B81';
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0, -18 + recoilOffset, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFE066';
+        ctx.fill();
+
+        ctx.restore();
+
+        // 中間核心小圓球
+        ctx.beginPath();
+        ctx.arc(0, 5, 14, 0, Math.PI * 2);
+        ctx.fillStyle = '#FF6B81';
+        ctx.fill();
+        ctx.strokeStyle = '#FFF';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    /* ==========================================================
+       4. 遊戲主控制器 (含 JSONP 免跨域即時同步 Google Sheet)
+       ========================================================== */
+    class BalloonGame {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.container = document.getElementById('canvasContainer');
+
+        this.allVocab = [...DEFAULT_VOCAB_DATA];
+        this.lessons = [];
+        this.currentLesson = "Lesson 1";
+        this.currentLessonWords = [];
+        this.currentWord = null;
+        this.wordQueue = [];
+
+        this.cannon = null;
+        this.balloons = [];
+        this.bullets = [];
+        this.particles = [];
+        this.clouds = [];
+
+        this.score = 0;
+        this.combo = 0;
+        this.isProcessingNext = false;
+
+        this.keys = { left: false, right: false, space: false };
+        this.touchMoveDir = 0;
+
+        this.elScore = document.getElementById('scoreDisplay');
+        this.elCombo = document.getElementById('comboDisplay');
+        this.elTargetChinese = document.getElementById('targetChinese');
+        this.elLessonContainer = document.getElementById('lessonContainer');
+        this.elAudioBtn = document.getElementById('btnAudio');
+        this.elSyncBtn = document.getElementById('btnSync');
+        this.elSettingsBtn = document.getElementById('btnSettings');
+        this.elSpeakPromptBtn = document.getElementById('btnSpeakPrompt');
+        this.toast = document.getElementById('toastMsg');
+
+        this.modal = document.getElementById('settingsModal');
+        this.btnCloseSettings = document.getElementById('btnCloseSettings');
+        this.btnSaveSettings = document.getElementById('btnSaveSettings');
+        this.btnResetDefault = document.getElementById('btnResetDefault');
+        this.inputSheetUrl = document.getElementById('inputSheetUrl');
+        this.inputSheetGid = document.getElementById('inputSheetGid');
+        this.sheetStatusText = document.getElementById('sheetStatusText');
+
+        this.init();
+      }
+
+      init() {
+        this.bindEvents();
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+
+        for (let i = 0; i < 6; i++) {
+          this.clouds.push({
+            x: Math.random() * this.canvas.width,
+            y: 30 + Math.random() * 160,
+            speed: 0.15 + Math.random() * 0.25,
+            size: 40 + Math.random() * 35
+          });
+        }
+
+        this.cannon = new CuteCannon(this.canvas.width / 2, this.canvas.height - 35);
+
+        this.loadSettings();
+
+        // 註冊全域 JSONP 回呼函式
+        window._handleGoogleSheetData = (data) => {
+          this.onGvizReceived(data);
+        };
+
+        // 立即同步 Google 試算表最新單字
+        this.syncGoogleSheet(false);
+
+        requestAnimationFrame((t) => this.gameLoop(t));
+      }
+
+      bindEvents() {
+        window.addEventListener('keydown', (e) => {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.keys.left = true;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') this.keys.right = true;
+          if (e.code === 'Space' || e.code === 'ArrowUp') {
+            if (!this.keys.space) {
+              this.shootBullet();
+            }
+            this.keys.space = true;
+            e.preventDefault();
+          }
+        });
+
+        window.addEventListener('keyup', (e) => {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.keys.left = false;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') this.keys.right = false;
+          if (e.code === 'Space' || e.code === 'ArrowUp') this.keys.space = false;
+        });
+
+        const btnLeft = document.getElementById('btnLeft');
+        const btnRight = document.getElementById('btnRight');
+        const btnShoot = document.getElementById('btnShoot');
+
+        const startMoveLeft = (e) => { e.preventDefault(); this.touchMoveDir = -1; };
+        const startMoveRight = (e) => { e.preventDefault(); this.touchMoveDir = 1; };
+        const stopMove = (e) => { e.preventDefault(); this.touchMoveDir = 0; };
+
+        btnLeft.addEventListener('pointerdown', startMoveLeft);
+        btnLeft.addEventListener('pointerup', stopMove);
+        btnLeft.addEventListener('pointercancel', stopMove);
+
+        btnRight.addEventListener('pointerdown', startMoveRight);
+        btnRight.addEventListener('pointerup', stopMove);
+        btnRight.addEventListener('pointercancel', stopMove);
+
+        btnShoot.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          this.shootBullet();
+        });
+
+        this.canvas.addEventListener('pointerdown', (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const clickY = e.clientY - rect.top;
+          this.cannon.aimAt(clickX, clickY);
+          this.shootBullet();
+        });
+
+        this.canvas.addEventListener('pointermove', (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+          this.cannon.aimAt(mouseX, mouseY);
+        });
+
+        this.elAudioBtn.addEventListener('click', () => {
+          sound.enabled = !sound.enabled;
+          this.elAudioBtn.textContent = sound.enabled ? '🔊' : '🔇';
+          this.showToast(sound.enabled ? '音效已開啟 🎵' : '音效已靜音 🔕');
+        });
+
+        this.elSpeakPromptBtn.addEventListener('click', () => {
+          if (this.currentWord) {
+            speakEnglish(this.currentWord.english);
+            this.showToast(`提示：${this.currentWord.english}`);
+          }
+        });
+
+        this.elSyncBtn.addEventListener('click', () => {
+          this.syncGoogleSheet(true);
+        });
+
+        this.elSettingsBtn.addEventListener('click', () => {
+          this.openSettingsModal();
+        });
+
+        this.btnCloseSettings.addEventListener('click', () => {
+          this.modal.classList.remove('active');
+        });
+
+        this.btnSaveSettings.addEventListener('click', () => {
+          this.saveSettings();
+        });
+
+        this.btnResetDefault.addEventListener('click', () => {
+          this.inputSheetUrl.value = DEFAULT_CONFIG.sheetId;
+          this.inputSheetGid.value = DEFAULT_CONFIG.gid;
+        });
+      }
+
+      resize() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+        const dpr = window.devicePixelRatio || 1;
+
+        this.canvas.width = width * dpr;
+        this.canvas.height = height * dpr;
+        this.ctx.resetTransform();
+        this.ctx.scale(dpr, dpr);
+
+        if (this.cannon) {
+          this.cannon.y = height - 35;
+          if (this.cannon.x > width) this.cannon.x = width / 2;
+        }
+      }
+
+      showToast(msg) {
+        this.toast.textContent = msg;
+        this.toast.classList.add('show');
+        clearTimeout(this.toastTimer);
+        this.toastTimer = setTimeout(() => {
+          this.toast.classList.remove('show');
+        }, 2500);
+      }
+
+      /* ==========================================================
+         5. Google 試算表同步 (JSONP 技術，完美支援 file:// 與跨域)
+         ========================================================== */
+      loadSettings() {
+        const savedSheetId = localStorage.getItem('vocab_sheet_id') || DEFAULT_CONFIG.sheetId;
+        const savedGid = localStorage.getItem('vocab_sheet_gid') || DEFAULT_CONFIG.gid;
+        this.inputSheetUrl.value = savedSheetId;
+        this.inputSheetGid.value = savedGid;
+      }
+
+      saveSettings() {
+        let sheetInput = this.inputSheetUrl.value.trim();
+        const gidInput = this.inputSheetGid.value.trim() || '0';
+
+        const match = sheetInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        const sheetId = match ? match[1] : sheetInput;
+
+        localStorage.setItem('vocab_sheet_id', sheetId);
+        localStorage.setItem('vocab_sheet_gid', gidInput);
+
+        this.modal.classList.remove('active');
+        this.syncGoogleSheet(true);
+      }
+
+      openSettingsModal() {
+        this.loadSettings();
+        this.modal.classList.add('active');
+      }
+
+      syncGoogleSheet(showFeedback = false) {
+        const sheetId = localStorage.getItem('vocab_sheet_id') || DEFAULT_CONFIG.sheetId;
+        const gid = localStorage.getItem('vocab_sheet_gid') || DEFAULT_CONFIG.gid;
+
+        if (showFeedback) this.showToast('正在連線 Google 試算表...');
+        this.sheetStatusText.textContent = '連線同步中...';
+        this.sheetStatusText.style.color = '#FFA000';
+
+        // 使用 JSONP 動態 Script 標籤（不受 CORS 阻擋，不管是本地 file:// 還是網頁都能完美讀取）
+        const oldScript = document.getElementById('gviz-jsonp-script');
+        if (oldScript) oldScript.remove();
+
+        const script = document.createElement('script');
+        script.id = 'gviz-jsonp-script';
+        script.src = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=responseHandler:_handleGoogleSheetData&gid=${gid}&_t=${Date.now()}`;
+        script.onerror = () => {
+          console.warn('JSONP 載入失敗，採用內建完整教材題庫');
+          this.sheetStatusText.textContent = '🟢 已載入試算表題庫（離線/本機模式）';
+          this.sheetStatusText.style.color = '#2E7D32';
+          this.refreshLessonButtons();
+        };
+        document.body.appendChild(script);
+      }
+
+      onGvizReceived(data) {
+        if (data && data.table && data.table.rows) {
+          const parsedWords = this.parseGvizRows(data.table.rows);
+          if (parsedWords.length > 0) {
+            this.allVocab = parsedWords;
+            this.sheetStatusText.textContent = `🟢 已成功連線！共載入 ${parsedWords.length} 個單字`;
+            this.sheetStatusText.style.color = '#2E7D32';
+            this.showToast(`🎉 成功同步雲端題庫（${parsedWords.length} 個單字）！`);
+            this.refreshLessonButtons();
+            return;
+          }
+        }
+        // 預防保護
+        this.refreshLessonButtons();
+      }
+
+      parseGvizRows(rows) {
+        const list = [];
+        rows.forEach(r => {
+          if (!r.c) return;
+          const c0 = r.c[0] && r.c[0].v !== null ? String(r.c[0].v).trim() : '';
+          const c1 = r.c[1] && r.c[1].v !== null ? String(r.c[1].v).trim() : '';
+          const c2 = r.c[2] && r.c[2].v !== null ? String(r.c[2].v).trim() : '';
+
+          // 略過非單字行（大標題或欄位名稱）
+          if (!c1 && !c2) return;
+          if (c0.toLowerCase() === 'lesson' || c1.includes('單字') || c2.includes('意思')) return;
+
+          if (c0 && c1 && c2) {
+            list.push({ lesson: c0, english: c1, chinese: c2 });
+          } else if (c1 && c2) {
+            list.push({ lesson: c0 || 'Lesson 1', english: c1, chinese: c2 });
+          } else if (c0 && c1) {
+            list.push({ lesson: 'Lesson 1', english: c0, chinese: c1 });
+          }
+        });
+        return list;
+      }
+
+      /* ==========================================================
+         6. 課次切換與題庫出題管理
+         ========================================================== */
+      refreshLessonButtons() {
+        const lessonSet = new Set();
+        this.allVocab.forEach(item => {
+          if (item.lesson) lessonSet.add(item.lesson.trim());
+        });
+
+        this.lessons = Array.from(lessonSet);
+        if (this.lessons.length === 0) {
+          this.lessons = ["Lesson 1"];
+        }
+
+        this.elLessonContainer.innerHTML = '<div class="lesson-label">📚 課程：</div>';
+
+        this.lessons.forEach(lName => {
+          const btn = document.createElement('button');
+          btn.className = 'lesson-btn' + (lName === this.currentLesson ? ' active' : '');
+          btn.textContent = lName;
+          btn.addEventListener('click', () => {
+            this.switchLesson(lName);
+          });
+          this.elLessonContainer.appendChild(btn);
+        });
+
+        if (!this.lessons.includes(this.currentLesson)) {
+          this.switchLesson(this.lessons[0]);
+        } else {
+          this.loadCurrentLesson();
+        }
+      }
+
+      switchLesson(lessonName) {
+        this.currentLesson = lessonName;
+
+        const buttons = this.elLessonContainer.querySelectorAll('.lesson-btn');
+        buttons.forEach(b => {
+          if (b.textContent === lessonName) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+
+        this.loadCurrentLesson();
+        this.showToast(`已切換至 ${lessonName}！`);
+      }
+
+      loadCurrentLesson() {
+        this.currentLessonWords = this.allVocab.filter(item => item.lesson.trim() === this.currentLesson);
+        if (this.currentLessonWords.length === 0) {
+          this.currentLessonWords = this.allVocab;
+        }
+
+        this.refillWordQueue();
+        this.balloons = [];
+        this.bullets = [];
+        this.particles = [];
+        this.nextQuestion();
+      }
+
+      refillWordQueue() {
+        const copy = [...this.currentLessonWords];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        this.wordQueue = copy;
+      }
+
+      nextQuestion() {
+        if (this.wordQueue.length === 0) {
+          this.refillWordQueue();
+        }
+
+        this.currentWord = this.wordQueue.pop();
+        this.elTargetChinese.textContent = this.currentWord.chinese;
+        this.spawnBalloonsForQuestion();
+      }
+
+      spawnBalloonsForQuestion() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        const candidates = this.allVocab.filter(w => w.english.toLowerCase() !== this.currentWord.english.toLowerCase());
+        for (let i = candidates.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+        }
+
+        const activeWords = [this.currentWord];
+        for (let i = 0; i < Math.min(4, candidates.length); i++) {
+          activeWords.push(candidates[i]);
+        }
+
+        activeWords.sort(() => Math.random() - 0.5);
+
+        this.balloons = [];
+        const spacing = width / (activeWords.length + 1);
+
+        activeWords.forEach((wordObj, idx) => {
+          const spawnX = spacing * (idx + 1) + (Math.random() - 0.5) * 25;
+          const spawnY = 80 + Math.random() * (height * 0.45);
+          this.balloons.push(new Balloon(wordObj, spawnX, spawnY, width));
+        });
+
+        this.isProcessingNext = false;
+      }
+
+      /* ==========================================================
+         7. 射擊與命中判定
+         ========================================================== */
+      shootBullet() {
+        if (!this.cannon) return;
+        sound.playShoot();
+        this.cannon.recoil = Math.PI;
+
+        const barrelLength = 40;
+        const bx = this.cannon.x + Math.cos(this.cannon.angle) * barrelLength;
+        const by = (this.cannon.y + 5) + Math.sin(this.cannon.angle) * barrelLength;
+
+        this.bullets.push(new Bullet(bx, by, this.cannon.angle));
+      }
+
+      checkCollisions() {
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+          const bullet = this.bullets[i];
+
+          for (let j = this.balloons.length - 1; j >= 0; j--) {
+            const balloon = this.balloons[j];
+
+            const dx = bullet.x - balloon.x;
+            const dy = bullet.y - balloon.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < balloon.radius + bullet.radius) {
+              this.bullets.splice(i, 1);
+
+              const isCorrect = balloon.word.english.toLowerCase() === this.currentWord.english.toLowerCase();
+
+              if (isCorrect) {
+                this.handleCorrectHit(balloon, j);
+              } else {
+                this.handleWrongHit(balloon);
+              }
+              break;
+            }
+          }
+        }
+      }
+
+      handleCorrectHit(balloon, index) {
+        if (this.isProcessingNext) return;
+        this.isProcessingNext = true;
+
+        sound.playPop();
+        sound.playCorrect();
+
+        for (let p = 0; p < 36; p++) {
+          this.particles.push(new Particle(balloon.x, balloon.y, balloon.color.fill));
+          this.particles.push(new Particle(balloon.x, balloon.y, '#FFE066'));
+        }
+
+        this.balloons.splice(index, 1);
+
+        this.combo++;
+        const points = 10 + (this.combo > 1 ? (this.combo - 1) * 2 : 0);
+        this.score += points;
+
+        this.elScore.textContent = this.score;
+        this.elCombo.textContent = `x${this.combo}`;
+
+        this.createFloatingFeedback(balloon.x, balloon.y, `+${points} GREAT! 🎉`, '#FF2E63');
+
+        speakEnglish(this.currentWord.english);
+
+        setTimeout(() => {
+          this.nextQuestion();
+        }, 1200);
+      }
+
+      handleWrongHit(balloon) {
+        sound.playWrong();
+        balloon.wobbleTime = 20;
+        this.combo = 0;
+        this.elCombo.textContent = 'x0';
+
+        this.createFloatingFeedback(balloon.x, balloon.y, `Oops! 這是 ${balloon.word.chinese}`, '#555');
+      }
+
+      createFloatingFeedback(x, y, text, color) {
+        const el = document.createElement('div');
+        el.className = 'floating-text-item';
+        el.textContent = text;
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        el.style.color = color;
+        el.style.fontSize = '1.3rem';
+        el.style.textShadow = '0 2px 6px rgba(255,255,255,0.9)';
+        this.container.appendChild(el);
+
+        setTimeout(() => {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 1000);
+      }
+
+      /* ==========================================================
+         8. 主渲染迴圈
+         ========================================================== */
+      gameLoop(timestamp) {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        if (this.keys.left || this.touchMoveDir === -1) {
+          this.cannon.move(-1, 40, width - 40);
+        }
+        if (this.keys.right || this.touchMoveDir === 1) {
+          this.cannon.move(1, 40, width - 40);
+        }
+
+        this.ctx.clearRect(0, 0, width, height);
+
+        // 背景雲朵
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+        this.clouds.forEach(cloud => {
+          cloud.x += cloud.speed;
+          if (cloud.x - cloud.size > width) cloud.x = -cloud.size * 2;
+
+          this.ctx.beginPath();
+          this.ctx.arc(cloud.x, cloud.y, cloud.size * 0.5, 0, Math.PI * 2);
+          this.ctx.arc(cloud.x + cloud.size * 0.35, cloud.y - cloud.size * 0.2, cloud.size * 0.4, 0, Math.PI * 2);
+          this.ctx.arc(cloud.x + cloud.size * 0.7, cloud.y, cloud.size * 0.45, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+
+        // 氣球
+        this.balloons.forEach(b => {
+          b.update(width, height);
+          b.draw(this.ctx);
+        });
+
+        // 子彈
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+          const bullet = this.bullets[i];
+          bullet.update();
+          bullet.draw(this.ctx);
+
+          if (bullet.y < -30 || bullet.x < -30 || bullet.x > width + 30) {
+            this.bullets.splice(i, 1);
+          }
+        }
+
+        this.checkCollisions();
+
+        // 爆炸彩帶粒子
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.update();
+          p.draw(this.ctx);
+          if (p.alpha <= 0) {
+            this.particles.splice(i, 1);
+          }
+        }
+
+        // 砲台
+        if (this.cannon) {
+          this.cannon.draw(this.ctx);
+        }
+
+        requestAnimationFrame((t) => this.gameLoop(t));
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      new BalloonGame();
+    });
+  </script>
+</body>
+</html>
